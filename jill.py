@@ -11,31 +11,48 @@ passwd: password
 """
 
 def jill():
-    #opens file and makes file readable
+    # Opens file and makes file readable
     wdlfile = open('wordlist.txt', 'r') 
-    #defines rfile and reads file
+    # Defines rfile and reads file
     rwdlfile = wdlfile.read()
-    #splits file into a list of 
+    # Splits file into a list of
     rwdlsfile = rwdlfile.split('\n')
 
-    #opens file and makes it readable
+    # Opens file and makes it readable
     passwdfile = open('passwords.txt', 'r')
-    #defines reading file and reads file
-    rpasswdfile = passwdfile.read()
-    #splits file by new lines and colons
+    # Reads length of file (lines)
+    length = len(passwdfile.readlines())
+    # Re-opens file and makes it readable
+    lpasswdfile = open('passwords.txt', 'r')
+    # Defines reading file and reads file
+    rpasswdfile = lpasswdfile.read()
+    # Splits file by new lines and colons
     rpasswdsfile = re.split('[:\n]', rpasswdfile)
-
-
-    a = []
+    print(rpasswdsfile)
+    usernames = []
+    keys = []
+    passwords = []
+    # Loops through each line of code and hashes each line
     for x in rwdlsfile:
-        print(x)
-        # Create a SHA-256 hash object
-        sha256_hash = hashlib.sha256(str([x]).encode('utf-8'))
-        # Update the hash object with the password bytes
-        sha256_hash.update(str([x]).encode('utf-8'))
+        # Hashes x in rwdlsfile (when using str(x) you added [] around the x inside the () making 123456 become ['123456']
+        sha256_hash = hashlib.sha256(str(x).encode('utf-8'))
+        # converts line in file to hash
+        keys.append(sha256_hash.hexdigest())
+
+        # Loops through each line of rpasswdsfile
+    for y in range(0, (length * 2)):
+
+        if y % 2 == 0:
+            usernames.append(rpasswdsfile[y])
+        else:
+            passwords.append(rpasswdsfile[y])
+
         
-    # Return the hexadecimal representation of the hash
-    return print(sha256_hash.hexdigest())
+
+
+    print(usernames)
+    print(passwords)
+    return
 
 print(jill())
 
