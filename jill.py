@@ -44,16 +44,12 @@ def jill():
     
     # List for hashes in file
     passwords = []
-    
-    # Loops through each line of code and hashes each line
-    for x in rwdlsfile:
-        
-        # Hashes x in rwdlsfile (when using str(x) you added [] around the x inside the () making 123456 become ['123456']
-        sha256_hash = hashlib.sha256(str(x).encode('utf-8'))
-        
-        # Converts line in file to hash
-        keys.append(sha256_hash.hexdigest())
 
+    #list of hashes that match
+    output = []
+        
+    line = 0
+        
     # Loops through each line in file with passwords and has a length count
     for y in range(0, (length * 2)):
         
@@ -65,15 +61,26 @@ def jill():
         else:
             passwords.append(rpasswdsfile[y])
     
-    # Loops through strings in keys list
-    for k in keys:
-        # Loops through strings in passwords list
-        for h in passwords:
+    # Loops through strings in passswords list
+    for h in passwords:
+        
+        # Since usernames are on even lines this allows the function to find the even lines (usernames) and print them
+        line += 1
+        
+        # Loops through strings in keys list
+        for k in rwdlsfile:
+        
+            # Hashes x in rwdlsfile 
+            sha256_hash = hashlib.sha256(str(k).encode('utf-8'))
+        
+            # Puts hash into keys array
+            hashd = sha256_hash.hexdigest()
+            
             # Compares string in keys (k) to string in passwords (h)
-            if k == h:
-                return k
-    print(h)
-    return
+            if h == hashd:
+                
+                output += ['{0:02}:{1:02}'.format(usernames[(line - 1)], k)]
+            print(output)
 
+    return output
 print(jill())
-
