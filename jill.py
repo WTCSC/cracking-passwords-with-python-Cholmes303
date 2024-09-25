@@ -39,13 +39,10 @@ def jill():
     # List of usernames for each hash
     usernames = []
     
-    # List for hashes that are made to compare
-    keys = []
-    
     # List for hashes in file
     passwords = []
 
-    #list of hashes that match
+    # List of correct passwords that match
     output = []
         
     line = 0
@@ -80,7 +77,8 @@ def jill():
             if h == hashd:
                 
                 output += ['{0:02}:{1:02}'.format(usernames[(line - 1)], k)]
-            print(output)
-
     return output
-print(jill())
+
+answers = jill()
+for x in answers:
+    print(x)
