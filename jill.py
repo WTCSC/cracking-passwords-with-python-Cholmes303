@@ -4,16 +4,18 @@ import re
 
 """
 Naming convention
+r: read
 s: split
 wd: word
 l: list
 passwd: password
 """
 
-def jill():
+
+def jill(passwordtxt, wordlisttxt):
     
     # Opens file and makes file readable
-    wdlfile = open('wordlist.txt', 'r') 
+    wdlfile = open(wordlisttxt, 'r') 
     
     # Defines rfile and reads file
     rwdlfile = wdlfile.read()
@@ -22,13 +24,13 @@ def jill():
     rwdlsfile = rwdlfile.split('\n')
 
     # Opens file and makes it readable
-    passwdfile = open('passwords.txt', 'r')
+    passwdfile = open(passwordtxt, 'r')
     
     # Reads length of file (lines)
     length = len(passwdfile.readlines())
     
     # Re-opens file and makes it readable
-    lpasswdfile = open('passwords.txt', 'r')
+    lpasswdfile = open(passwordtxt, 'r')
     
     # Defines reading file and reads file
     rpasswdfile = lpasswdfile.read()
@@ -77,8 +79,21 @@ def jill():
             if h == hashd:
                 
                 output += ['{0:02}:{1:02}'.format(usernames[(line - 1)], k)]
+    
     return output
 
-answers = jill()
-for x in answers:
-    print(x)
+def main():
+
+    parser = argparse.ArgumentParser(description='Crack passwords with two files')
+    
+    parser.add_argument('wordlisttxt', help='File with words to try')
+    parser.add_argument('passwordtxt', help='File with passwords that need to be cracked') 
+    
+    args = parser.parse_args()
+
+    arguments = jill(args.passwordtxt, args.wordlisttxt)
+    for x in arguments:
+        print(x)
+
+if __name__ == "__main__":
+    main()
