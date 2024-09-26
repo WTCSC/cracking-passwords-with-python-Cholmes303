@@ -86,9 +86,9 @@ def main():
 
     parser = argparse.ArgumentParser(description='Crack passwords with two files')
     
-    parser.add_argument('wordlisttxt', help='File with words to try')
     parser.add_argument('passwordtxt', help='File with passwords that need to be cracked') 
-    
+    parser.add_argument('wordlisttxt', help='File with words to try')
+
     args = parser.parse_args()
 
     arguments = jill(args.passwordtxt, args.wordlisttxt)
