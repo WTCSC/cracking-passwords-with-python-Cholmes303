@@ -8,6 +8,8 @@ r: read
 s: split
 wd: word
 l: list
+x: line in file
+p: username:password output
 len: length
 passwd: password
 """
@@ -48,19 +50,19 @@ def jill(passwordtxt, wordlisttxt):
     # List of the username and word that matched hashed password
     output = []
 
-    # Defines line to be used to fine the username or password within file    
+    # Defines line to be used to find the username or password within file    
     line = 0
         
     # Loops through each line in file with usernames and passwords to sort each into their respective list
-    for y in range(0, (length * 2)):
+    for x in range(0, (length * 2)):
         
         # If length is divisible by 2 it puts that line of contents into the username list
-        if y % 2 == 0:
-            usernames.append(rpasswdsfile[y])
+        if x % 2 == 0:
+            usernames.append(rpasswdsfile[x])
         
         # If length is not divisible by 2 it puts that line of contents into the passwords list
         else:
-            passwords.append(rpasswdsfile[y])
+            passwords.append(rpasswdsfile[x])
     
     # Loops through the hashed passwords in the passwords list
     for h in passwords:
@@ -69,10 +71,10 @@ def jill(passwordtxt, wordlisttxt):
         line += 1
         
         # Loops through the list of words that are going to be hashed and compared
-        for k in rwdlsfile:
+        for wd in rwdlsfile:
         
             # Defines sha256_hash and hashes each line/word in rwdlsfile 
-            sha256_hash = hashlib.sha256(str(k).encode('utf-8'))
+            sha256_hash = hashlib.sha256(str(wd).encode('utf-8'))
         
             # Defines hashd and puts the hashed word into hexadecimal values
             hashd = sha256_hash.hexdigest()
@@ -83,7 +85,7 @@ def jill(passwordtxt, wordlisttxt):
                 # Puts the words that match the hashes in passwords into an output list in usernames:password format. 
                 # The variable k is used as this is the unhashed value. 
                 # [(line - 1)] is used to pull the correct username for each password.
-                output += ['{0:02}:{1:02}'.format(usernames[(line - 1)], k)]
+                output += ['{0:02}:{1:02}'.format(usernames[(line - 1)], wd)]
     
     # Returns list of usernames and words that matched
     return output
@@ -103,8 +105,8 @@ def main():
     arguments = jill(args.passwordtxt, args.wordlisttxt)
     
     # Loops through the arguments in password cracking function and prints matching usernames and passwords
-    for x in arguments:
-        print(x)
+    for p in arguments:
+        print(p)
 
 if __name__ == "__main__":
     main()
