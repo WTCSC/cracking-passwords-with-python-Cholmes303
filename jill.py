@@ -8,48 +8,50 @@ r: read
 s: split
 wd: word
 l: list
+len: length
 passwd: password
 """
 
-
+# Function used to crack hashed passwords by comparing a list of words to hashed passwords
 def jill(passwordtxt, wordlisttxt):
     
-    # Opens file and makes file readable
+    # Defines file with words to compare hashes as wdlfile, opens file, and makes file readable
     wdlfile = open(wordlisttxt, 'r') 
     
-    # Defines rfile and reads file
+    # Defines rwdlfile and reads file
     rwdlfile = wdlfile.read()
     
-    # Splits file into a list of
+    # Defines rwdlsfile and splits file into a list of strings, each line in the file being a string
     rwdlsfile = rwdlfile.split('\n')
 
-    # Opens file and makes it readable
+    # Defines file with hashed passwords as passwdfile, opens file, and makes it readable
     passwdfile = open(passwordtxt, 'r')
     
-    # Reads length of file (lines)
+    # Reads length of file (# of lines) and closes
     length = len(passwdfile.readlines())
     
-    # Re-opens file and makes it readable
-    lpasswdfile = open(passwordtxt, 'r')
+    # Re-opens file and makes it readable again
+    lenpasswdfile = open(passwordtxt, 'r')
     
-    # Defines reading file and reads file
-    rpasswdfile = lpasswdfile.read()
+    # Defines rpasswdfile and reads file
+    rpasswdfile = lenpasswdfile.read()
     
     # Splits file by new lines and colons
     rpasswdsfile = re.split('[:\n]', rpasswdfile)
     
-    # List of usernames for each hash
+    # List of usernames for each hashed password
     usernames = []
     
-    # List for hashes in file
+    # List for hashes in file of usernames and hashed passwords
     passwords = []
 
-    # List of correct passwords that match
+    # List of the username and word that matched hashed password
     output = []
-        
+
+    # Defines line to be used to fine the username or password within file    
     line = 0
         
-    # Loops through each line in file with passwords and has a length count
+    # Loops through each line in file with usernames and passwords to sort each into their respective list
     for y in range(0, (length * 2)):
         
         # If length is divisible by 2 it puts that line of contents into the username list
@@ -60,38 +62,47 @@ def jill(passwordtxt, wordlisttxt):
         else:
             passwords.append(rpasswdsfile[y])
     
-    # Loops through strings in passswords list
+    # Loops through the hashed passwords in the passwords list
     for h in passwords:
         
-        # Since usernames are on even lines this allows the function to find the even lines (usernames) and print them
+        # Since usernames are on even lines this allows the function to find the even lines (usernames) and put them into the output
         line += 1
         
-        # Loops through strings in keys list
+        # Loops through the list of words that are going to be hashed and compared
         for k in rwdlsfile:
         
-            # Hashes x in rwdlsfile 
+            # Defines sha256_hash and hashes each line/word in rwdlsfile 
             sha256_hash = hashlib.sha256(str(k).encode('utf-8'))
         
-            # Puts hash into keys array
+            # Defines hashd and puts the hashed word into hexadecimal values
             hashd = sha256_hash.hexdigest()
             
-            # Compares string in keys (k) to string in passwords (h)
+            # Compares the hashed string in rwdsfile (hashd) to hashed string in passwords (h)
             if h == hashd:
                 
+                # Puts the words that match the hashes in passwords into an output list in usernames:password format. 
+                # The variable k is used as this is the unhashed value. 
+                # [(line - 1)] is used to pull the correct username for each password.
                 output += ['{0:02}:{1:02}'.format(usernames[(line - 1)], k)]
     
+    # Returns list of usernames and words that matched
     return output
 
 def main():
 
+    # Description of the program
     parser = argparse.ArgumentParser(description='Crack passwords with two files')
     
+    # Adds two arguments that can be used to compare two files to crack password
     parser.add_argument('passwordtxt', help='File with passwords that need to be cracked') 
     parser.add_argument('wordlisttxt', help='File with words to try')
 
     args = parser.parse_args()
 
+    # Adds the two arguments defined to the password cracking function
     arguments = jill(args.passwordtxt, args.wordlisttxt)
+    
+    # Loops through the arguments in password cracking function and prints matching usernames and passwords
     for x in arguments:
         print(x)
 
